@@ -274,3 +274,30 @@ def bubble_plot(df, col_x, col_y, col_size, scale = 1000):
     plt.show()
 
 
+def scatter_plots_agrupados(df, col_categoria, col_num1, col_num2):
+    """
+    Genera scatter plots superpuestos de dos columnas numéricas, 
+    agrupados y coloreados según una columna categórica.
+
+    Args:
+    df (pd.DataFrame): DataFrame que contiene los datos.
+    col_categoria (str): Nombre de la columna categórica para agrupar y colorear los datos.
+    col_num1 (str): Nombre de la primera columna numérica para el eje X.
+    col_num2 (str): Nombre de la segunda columna numérica para el eje Y.
+    """
+    # Configuración para mejorar la estética del gráfico
+    sns.set(style="whitegrid")
+
+    plt.figure(figsize=(10, 8))
+
+    # Usar seaborn para generar los scatter plots agrupados y coloreados
+    sns.scatterplot(x=col_num1, y=col_num2, hue=col_categoria, data=df, palette="viridis")
+
+    # Añadir título y etiquetas
+    plt.title(f'Scatter Plots de {col_num1} vs {col_num2} Agrupados por {col_categoria}')
+    plt.xlabel(col_num1)
+    plt.ylabel(col_num2)
+
+    # Mostrar leyenda y gráfico
+    plt.legend(title=col_categoria)
+    plt.show()
