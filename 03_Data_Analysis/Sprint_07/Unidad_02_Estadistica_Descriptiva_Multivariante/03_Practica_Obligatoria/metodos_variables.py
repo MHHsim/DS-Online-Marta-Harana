@@ -54,6 +54,32 @@ f_val, p_val = stats.f_oneway(*var_cat_grupo) # El método * (igual que cuando v
 print("Valor F:", f_val)
 print("Valor p:", p_val)
 
+
+
+
+# Metodo ANOVA (variable categórica NO binaria vs numérica)
+variable_categorica = "size"
+variable_numerica = "tip"
+df_resultado = df_tips
+
+from scipy import stats
+
+# 1. Obtener los valores únicos de la variable categórica
+grupos = df_resultado[variable_categorica].unique()
+
+# 2. Crear una lista donde cada elemento es la serie numérica filtrada por cada categoría
+listas_grupos = [
+    df_resultado[df_resultado[variable_categorica] == grupo][variable_numerica]
+    for grupo in grupos
+]
+
+# 3. Aplicar ANOVA
+f_val, p_val = stats.f_oneway(*listas_grupos)
+
+# 4. Mostrar resultados
+print("Valor F:", f_val)
+print("Valor p:", p_val)
+
 #P < 0.05  →  Rechazamos la hipótesis nula (H₀).  
 #            Hay evidencia estadística de relación o diferencia entre las variables.
  
