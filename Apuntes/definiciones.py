@@ -104,3 +104,38 @@ def tipifica_variables(df: pd.DataFrame, umbral_categorica: int, umbral_continua
     })
 
     return resultado
+
+
+from sklearn.feature_selection import f_classif
+import pandas as pd
+
+def calcular_anova(df, target):
+    """
+    Calcula ANOVA entre todas las variables numéricas del dataframe y un target categórico.
+    
+    Parámetros:
+        df (DataFrame): tu dataset
+        target (str): nombre de la columna target categórica
+    
+    Retorna:
+        DataFrame ordenado por p_value ascendente
+    """
+    
+    # 1. Seleccionar solo columnas numéricas
+    features_num = df.select_dtypes(include=["int64", "float64"]).columns.tolist()
+    
+    # 2. Separar X e y
+    X = df[features_num]
+    y = df[target]
+    
+    # 3. Calcular ANOVA
+    F_scores, p_values = f_classif(X, y)
+    
+    # 4. Crear tabla de resultados
+    anova_results = pd.DataFrame({
+        "feature": features_num,
+        "F_score": F_scores,
+        "p_value": p_values
+    }).sort_values("p_value")
+    
+    return anova_results
