@@ -239,3 +239,64 @@ def get_features_cat_classification(df, target, pvalue_rango=0.05):
             features_cat_sel.append(col)
 
     return features_cat_sel
+
+
+from scipy.stats import pearsonr, spearmanr
+import pandas as pd
+import numpy as np
+
+def get_corr_features(
+    df: pd.DataFrame,
+    features_num: list,
+    target: str,
+    umbral_corr: float = 0.2,
+    pvalue: float = None
+):
+    """
+    Calcula correlaciones Pearson y Spearman entre las features numéricas y el target.
+    Devuelve:
+        - tabla con ambas correlaciones
+        - lista de features seleccionadas según el umbral
+    """
+
+    resultados = []
+
+    for col in features_num:
+        datos = df[[col, target]].dropna()
+
+        # evitar columnas constantes
+        if datos[col].nunique() < 2:
+            continue
+
+        # Pearson
+        r_p, p_p = pearsonr(datos[col], datos[target])
+
+        # Spearman
+        r_s, p_s = spearmanr(datos[col], datos[target])
+
+        resultados.append([col, r_p, p_p, r_s, p_s])
+
+    tabla = pd.DataFrame(
+        resultados,
+        columns=['feature', 'pearson', 'p_pearson', 'spearman', 'p_spearman']
+    ).set_index('feature')
+
+    # Selección de features según umbral y pvalue
+    if pvalue is None:
+        seleccionadas = tabla[
+            (tabla['pearson'].abs() > umbral_corr) |
+            (tabla['spearman'].abs() > umbral_corr)
+        ].index.tolist()
+    else:
+        seleccionadas = tabla[
+            (
+                (tabla['pearson'].abs() > umbral_corr) &
+                (tabla['p_pearson'] < pvalue)
+            ) |
+            (
+                (tabla['spearman'].abs() > umbral_corr) &
+                (tabla['p_spearman'] < pvalue)
+            )
+        ].index.tolist()
+
+    return tabla, seleccionadas
