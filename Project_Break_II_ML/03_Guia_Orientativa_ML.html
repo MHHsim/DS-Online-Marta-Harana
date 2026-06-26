@@ -357,23 +357,29 @@ model:    <span class="st">"model: evaluación final RandomForest contra test �
         <div class="step-header" onclick="toggleStep(this)">
           <div class="step-num">6</div>
           <div class="step-title-wrap">
-            <div class="step-title">Entrega final</div>
-            <div class="step-subtitle">Merge a main</div>
+            <div class="step-title">Entrega final y tag <span class="en-term">Release Tag</span></div>
+            <div class="step-subtitle">Merge a main + tag v1.0 para marcar la entrega</div>
           </div>
           <span class="step-toggle">▾</span>
         </div>
         <div class="step-body">
-          <p class="step-desc">Cuando el proyecto está terminado y todo el código está en <code>develop</code>, se hace el merge final a <code>main</code>.</p>
+          <p class="step-desc">Cuando el proyecto está terminado y todo el código está en <code>develop</code>, se hace el merge final a <code>main</code> y se crea un tag que marca la versión de entrega.</p>
           <div class="code-block">
             <div class="code-header"><span class="code-lang">Bash · Git</span><button class="copy-btn" onclick="copyCode(this)">Copiar</button></div>
             <div class="code-content"><span class="cm"># Merge final de develop a main</span>
 git checkout main
 git merge develop
 git push origin main
-          </div></div>
+
+<span class="cm"># Crear tag de entrega</span>
+git tag -a v1.0 -m <span class="st">"Entrega final Proyecto ML"</span>
+git push origin v1.0</div>
+          </div>
+          <div class="tip-box"><strong>💡 Extra:</strong> El tag <code>v1.0</code> permite a los evaluadores acceder exactamente al estado del repositorio en el momento de la entrega, aunque después sigáis trabajando.</div>
           <ul class="checklist">
             <li onclick="toggleCheck(this)"><span class="check-box"></span><span>Todo el trabajo integrado en <code>develop</code> sin conflictos</span></li>
             <li onclick="toggleCheck(this)"><span class="check-box"></span><span>Merge final de <code>develop</code> a <code>main</code> realizado</span></li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span><span>Tag <code>v1.0</code> creado y publicado en remoto</span></li>
           </ul>
         </div>
       </div>
